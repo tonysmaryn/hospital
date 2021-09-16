@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
 import { useDispatch, useSelector } from 'react-redux';
-import { getEmployeesList } from '../../redux/actionCreators';
+import { getEmployeesList } from '../../redux/Employees/actionCreators';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -50,15 +50,27 @@ const columns = [
 
 const EmployeesTable = () => {
   const dispatch = useDispatch();
+
   React.useEffect(() => {
     dispatch(getEmployeesList());
   }, [dispatch]);
-  const data1 = useSelector((state) => state.employees);
+
+  const { employees, loading, error } = useSelector((state) => state.employees);
+
   const classes = useStyles();
+
+  if (loading) {
+    return <h2>Идет загрузка</h2>;
+  }
+
+  if (error) {
+    return <h2>При загрузке произошла ошибка</h2>;
+  }
+
   return (
     <div className={classes.container}>
       <h1>EmployeesTable</h1>
-      <DataGrid rows={data1} columns={columns} />
+      <DataGrid rows={employees} columns={columns} />
       <Link to="/:id">Link to Time Table</Link>
     </div>
   );

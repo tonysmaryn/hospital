@@ -1,18 +1,6 @@
-export const ActionTypes = {
-    FETCH_EMPLOYEES: 'FETCH_EMPLOYEES',
-};
+import { combineReducers } from "redux";
+import { employeesReducer } from "./Employees/reducer";
 
-const initialState = {
-    employees: [],
-}
-
-export const rootReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case ActionTypes.FETCH_EMPLOYEES: {
-            return { ...state, employees: action.payload }
-        }
-        default: {
-            return state;
-        }
-    }
-}
+export const rootReducer = combineReducers({
+    employees: employeesReducer,
+})
