@@ -2,6 +2,8 @@ import { makeStyles } from '@material-ui/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
+import { useDispatch, useSelector } from 'react-redux';
+import { getEmployeesList } from '../../redux/actionCreators';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -46,63 +48,17 @@ const columns = [
   },
 ];
 
-const data = [
-  {
-    id: 1,
-    firstName: 'Леонид',
-    lastName: 'Старокадомский',
-    middleName: 'Михайлович',
-    birthDate: '1875-03-27',
-    phone: '+79975669545',
-  },
-  {
-    id: 2,
-    firstName: 'Владимир',
-    lastName: 'Демихов',
-    middleName: 'Петрович',
-    birthDate: '1916-06-18',
-    phone: '+74951263366',
-  },
-  {
-    id: 3,
-    firstName: 'Виктор',
-    lastName: 'Калнберз',
-    middleName: 'Константинович',
-    birthDate: '1928-06-02',
-    phone: '+37156698963',
-  },
-  {
-    id: 4,
-    firstName: 'Алоис',
-    lastName: 'Альцгеймер',
-    middleName: 'Эдуардович',
-    birthDate: '1864-06-14',
-    phone: '+15559665599',
-  },
-  {
-    id: 5,
-    firstName: 'Авиценна',
-    lastName: 'Сина',
-    middleName: 'Абу Али Ибн',
-    birthDate: '980-08-23',
-    phone: '+15559171855',
-  },
-  {
-    id: 6,
-    firstName: 'Александр',
-    lastName: 'Флеминг',
-    middleName: 'Хугович',
-    birthDate: '1881-08-06',
-    phone: '+4569988569',
-  },
-];
-
 const EmployeesTable = () => {
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    dispatch(getEmployeesList());
+  }, [dispatch]);
+  const data1 = useSelector((state) => state.employees);
   const classes = useStyles();
   return (
     <div className={classes.container}>
       <h1>EmployeesTable</h1>
-      <DataGrid rows={data} columns={columns} />
+      <DataGrid rows={data1} columns={columns} />
       <Link to="/:id">Link to Time Table</Link>
     </div>
   );
