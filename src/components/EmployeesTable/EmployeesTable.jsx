@@ -59,6 +59,13 @@ const EmployeesTable = () => {
 
   const classes = useStyles();
 
+  const sortEmployeers = () => {
+    if (employees.length > 0) {
+      const _t = [...employees];
+      return _t.sort((a, b) => (a.lastName > b.lastName ? 1 : -1));
+    }
+  };
+
   if (loading) {
     return <h2>Идет загрузка</h2>;
   }
@@ -69,9 +76,8 @@ const EmployeesTable = () => {
 
   return (
     <div className={classes.container}>
-      <h1>EmployeesTable</h1>
-      <DataGrid rows={employees} columns={columns} />
-      <Link to="/:id">Link to Time Table</Link>
+      <h1>Таблица работников</h1>
+      <DataGrid rows={sortEmployeers()} columns={columns} />
     </div>
   );
 };

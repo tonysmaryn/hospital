@@ -87,8 +87,8 @@ const TimeTable = () => {
   return (
     <div className={classes.container}>
       <h2>
-        TimeTable for {employee.lastName} {employee.firstName}{' '}
-        {employee.middleName}
+        Таблица учета учета рабочего времени для {employee.lastName}{' '}
+        {employee.firstName} {employee.middleName}
       </h2>
       <DataGrid
         columns={columns}
@@ -97,7 +97,6 @@ const TimeTable = () => {
           if (violations.includes(params.id)) return `red`;
         }}
       />
-      <Link to="/">Link to Employees Table</Link>
     </div>
   );
 };
