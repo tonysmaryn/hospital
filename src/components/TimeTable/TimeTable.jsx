@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core';
+import { DataGrid } from '@mui/x-data-grid';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -6,7 +7,44 @@ import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { getFullWorklog } from '../../redux/Worklog/actionCreator';
 
-const useStyles = makeStyles((theme) => ({}));
+const useStyles = makeStyles((theme) => ({
+  container: {
+    height: 500,
+  },
+}));
+
+const columns = [
+  {
+    field: 'from',
+    headerName: 'Время ухода',
+    width: 300,
+    valueFormatter: (params) => {
+      const date = params
+        .getValue(params.id, 'from')
+        .split(' ')[0]
+        .split('-')
+        .reverse()
+        .join('.');
+      const time = params.getValue(params.id, 'from').split(' ')[1];
+      return `${time}, ${date}`;
+    },
+  },
+  {
+    field: 'to',
+    headerName: 'Время возвращения',
+    width: 300,
+    valueFormatter: (params) => {
+      const date = params
+        .getValue(params.id, 'from')
+        .split(' ')[0]
+        .split('-')
+        .reverse()
+        .join('.');
+      const time = params.getValue(params.id, 'from').split(' ')[1];
+      return `${time}, ${date}`;
+    },
+  },
+];
 
 const TimeTable = () => {
   const { id } = useParams();
@@ -19,15 +57,31 @@ const TimeTable = () => {
 
   const { worklog, loading, error } = useSelector((state) => state.worklog);
 
+  const { employees } = useSelector((state) => state.employees);
+
+  const employee = employees.filter((item) => item.id === Number(id))[0];
+
   const employeeWorklog = worklog.filter(
     (item) => item.employee_id === Number(id)
   );
 
   const classes = useStyles();
 
+  if (loading) {
+    return <h2>Идет загрузка</h2>;
+  }
+
+  if (error) {
+    return <h2>При загрузке произошла ошибка</h2>;
+  }
+
   return (
-    <div>
-      <h1>TimeTable for {id}</h1>
+    <div className={classes.container}>
+      <h2>
+        TimeTable for {employee.lastName} {employee.firstName}{' '}
+        {employee.middleName}
+      </h2>
+      <DataGrid columns={columns} rows={employeeWorklog} />
       <Link to="/">Link to Employees Table</Link>
     </div>
   );
