@@ -4,7 +4,6 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import { getFullWorklog } from '../../redux/Worklog/actionCreator';
 import { checkViolations } from '../../utils/checkViolations';
 
