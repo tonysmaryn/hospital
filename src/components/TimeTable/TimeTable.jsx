@@ -6,10 +6,17 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { getFullWorklog } from '../../redux/Worklog/actionCreator';
+import { checkViolations } from '../../utils/checkViolations';
 
 const useStyles = makeStyles((theme) => ({
   container: {
     height: 500,
+    '& .red': {
+      backgroundColor: 'red',
+      '&:hover': {
+        backgroundColor: 'red',
+      },
+    },
   },
 }));
 
@@ -35,12 +42,12 @@ const columns = [
     width: 300,
     valueFormatter: (params) => {
       const date = params
-        .getValue(params.id, 'from')
+        .getValue(params.id, 'to')
         .split(' ')[0]
         .split('-')
         .reverse()
         .join('.');
-      const time = params.getValue(params.id, 'from').split(' ')[1];
+      const time = params.getValue(params.id, 'to').split(' ')[1];
       return `${time}, ${date}`;
     },
   },
@@ -65,6 +72,8 @@ const TimeTable = () => {
     (item) => item.employee_id === Number(id)
   );
 
+  const violations = checkViolations(worklog, id);
+
   const classes = useStyles();
 
   if (loading) {
@@ -81,7 +90,13 @@ const TimeTable = () => {
         TimeTable for {employee.lastName} {employee.firstName}{' '}
         {employee.middleName}
       </h2>
-      <DataGrid columns={columns} rows={employeeWorklog} />
+      <DataGrid
+        columns={columns}
+        rows={employeeWorklog}
+        getRowClassName={(params) => {
+          if (violations.includes(params.id)) return `red`;
+        }}
+      />
       <Link to="/">Link to Employees Table</Link>
     </div>
   );
